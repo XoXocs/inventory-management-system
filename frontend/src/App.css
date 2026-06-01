@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  background: #0f172a;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.page-title {
+  color: white;
+  text-align: center;
+  margin-bottom: 30px !important;
+}
+
+.metric-card {
+  background: #1e293b !important;
+  color: white !important;
+  border-radius: 16px !important;
+}
+
+.section-card {
+  margin-top: 25px;
+  border-radius: 16px !important;
+}
+
+.MuiTableHead-root {
+  background: #f1f5f9;
+}
+
+.MuiTableCell-head {
+  font-weight: bold !important;
+}
+
+.MuiCard-root {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+}
+
+.MuiButton-containedError {
+  text-transform: none !important;
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 28px !important;
+  }
+}
