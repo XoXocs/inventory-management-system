@@ -31,7 +31,7 @@ import {
 import "./App.css";
 
 function App() {
-  const API = "http://127.0.0.1:8000";
+  const API = "https://inventory-management-system-tuyu.onrender.com";
 
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
