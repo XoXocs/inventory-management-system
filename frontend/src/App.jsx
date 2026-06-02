@@ -36,7 +36,24 @@ function App() {
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [search, setSearch] = useState("");
+const [search, setSearch] = useState("");
+
+const [newOrder, setNewOrder] = useState({
+  customer_id: "",
+  product_id: "",
+  quantity: "",
+});
+const [newProduct, setNewProduct] = useState({
+  name: "",
+  sku: "",
+  price: "",
+  stock: "",
+});
+const [newCustomer, setNewCustomer] = useState({
+  name: "",
+  email: "",
+  phone: "",
+});
 
   const getProducts = async () => {
     const res = await axios.get(`${API}/products`);
@@ -74,6 +91,82 @@ function App() {
     getOrders();
     getProducts();
   };
+  const createOrder = async () => {
+  try {
+    await axios.post(`${API}/orders`, {
+      customer_id: Number(newOrder.customer_id),
+      product_id: Number(newOrder.product_id),
+      quantity: Number(newOrder.quantity),
+    });
+
+    alert("Order created successfully");
+
+    setNewOrder({
+      customer_id: "",
+      product_id: "",
+      quantity: "",
+    });
+
+    getOrders();
+    getProducts();
+  } catch (error) {
+    alert(
+      error.response?.data?.detail ||
+      "Failed to create order"
+    );
+  }
+};
+const createProduct = async () => {
+  try {
+    await axios.post(`${API}/products`, {
+      name: newProduct.name,
+      sku: newProduct.sku,
+      price: Number(newProduct.price),
+      stock: Number(newProduct.stock),
+    });
+
+    alert("Product created successfully");
+
+    setNewProduct({
+      name: "",
+      sku: "",
+      price: "",
+      stock: "",
+    });
+
+    getProducts();
+  } catch (error) {
+    alert(
+      error.response?.data?.detail ||
+      "Failed to create product"
+    );
+  }
+};
+const createCustomer = async () => {
+  try {
+    await axios.post(`${API}/customers`, {
+      name: newCustomer.name,
+      email: newCustomer.email,
+      phone: newCustomer.phone,
+    });
+
+    alert("Customer created successfully");
+
+    setNewCustomer({
+      name: "",
+      email: "",
+      phone: "",
+    });
+
+    getCustomers();
+  } catch (error) {
+    alert(
+      error.response?.data?.detail ||
+      "Failed to create customer"
+    );
+  }
+};
+  
 
   const inventoryValue = products.reduce(
     (sum, product) => sum + product.price * product.stock,
@@ -228,6 +321,85 @@ function App() {
           <Typography variant="h5" gutterBottom>
             Products
           </Typography>
+          <Card className="section-card">
+  <CardContent>
+
+    <Typography variant="h5" gutterBottom>
+      Add Product
+    </Typography>
+
+    <Grid container spacing={2}>
+
+      <Grid item xs={12} md={3}>
+        <TextField
+          fullWidth
+          label="Product Name"
+          value={newProduct.name}
+          onChange={(e) =>
+            setNewProduct({
+              ...newProduct,
+              name: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={3}>
+        <TextField
+          fullWidth
+          label="SKU"
+          value={newProduct.sku}
+          onChange={(e) =>
+            setNewProduct({
+              ...newProduct,
+              sku: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={3}>
+        <TextField
+          fullWidth
+          label="Price"
+          type="number"
+          value={newProduct.price}
+          onChange={(e) =>
+            setNewProduct({
+              ...newProduct,
+              price: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={3}>
+        <TextField
+          fullWidth
+          label="Stock"
+          type="number"
+          value={newProduct.stock}
+          onChange={(e) =>
+            setNewProduct({
+              ...newProduct,
+              stock: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+    </Grid>
+
+    <Button
+      variant="contained"
+      sx={{ mt: 2 }}
+      onClick={createProduct}
+    >
+      Add Product
+    </Button>
+
+  </CardContent>
+</Card>
 
           <TableContainer component={Paper}>
             <Table>
@@ -274,7 +446,70 @@ function App() {
 
         </CardContent>
       </Card>
+      <Card className="section-card">
+  <CardContent>
 
+    <Typography variant="h5" gutterBottom>
+      Add Customer
+    </Typography>
+
+    <Grid container spacing={2}>
+
+      <Grid item xs={12} md={4}>
+        <TextField
+          fullWidth
+          label="Customer Name"
+          value={newCustomer.name}
+          onChange={(e) =>
+            setNewCustomer({
+              ...newCustomer,
+              name: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <TextField
+          fullWidth
+          label="Email"
+          value={newCustomer.email}
+          onChange={(e) =>
+            setNewCustomer({
+              ...newCustomer,
+              email: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <TextField
+          fullWidth
+          label="Phone"
+          value={newCustomer.phone}
+          onChange={(e) =>
+            setNewCustomer({
+              ...newCustomer,
+              phone: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+    </Grid>
+
+    <Button
+      variant="contained"
+      sx={{ mt: 2 }}
+      onClick={createCustomer}
+    >
+      Add Customer
+    </Button>
+
+  </CardContent>
+</Card>
+      
       <Card className="section-card">
         <CardContent>
 
@@ -334,12 +569,74 @@ function App() {
         </CardContent>
       </Card>
 
-      <Card className="section-card">
-        <CardContent>
+<Card className="section-card">
+  <CardContent>
 
-          <Typography variant="h5" gutterBottom>
-            Orders
-          </Typography>
+    <Typography variant="h5" gutterBottom>
+      Create Order
+    </Typography>
+
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={4}>
+        <TextField
+          fullWidth
+          label="Customer ID"
+          value={newOrder.customer_id}
+          onChange={(e) =>
+            setNewOrder({
+              ...newOrder,
+              customer_id: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <TextField
+          fullWidth
+          label="Product ID"
+          value={newOrder.product_id}
+          onChange={(e) =>
+            setNewOrder({
+              ...newOrder,
+              product_id: e.target.value,
+            })
+          }
+        />
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <TextField
+          fullWidth
+          label="Quantity"
+          value={newOrder.quantity}
+          onChange={(e) =>
+            setNewOrder({
+              ...newOrder,
+              quantity: e.target.value,
+            })
+          }
+        />
+      </Grid>
+    </Grid>
+
+    <Button
+      variant="contained"
+      sx={{ mt: 2 }}
+      onClick={createOrder}
+    >
+      Create Order
+    </Button>
+
+  </CardContent>
+</Card>
+
+<Card className="section-card">
+  <CardContent>
+
+    <Typography variant="h5" gutterBottom>
+      Orders
+    </Typography>
 
           <TableContainer component={Paper}>
             <Table>
